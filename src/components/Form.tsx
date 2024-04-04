@@ -1,13 +1,22 @@
-import { useState, ChangeEvent, FormEvent } from 'react'
+import { useState, ChangeEvent, FormEvent, Dispatch } from 'react'
+import { v4 as uuidv4 } from 'uuid'
 import { Activity } from '../types'
 import { categories } from '../data/categories'
+import { ActivityActions } from '../reducers/activity-reducer'
 
-export default function Form() {
-	const [activity, setActivity] = useState<Activity>({
-		category: 1,
-		name: '',
-		calories: 0,
-	})
+type FormsProps = {
+	dispatch: Dispatch<ActivityActions>
+}
+
+const initialState: Activity = {
+	id: uuidv4(),
+	category: 1,
+	name: '',
+	calories: 0,
+}
+
+export default function Form({ dispatch }: FormsProps) {
+	const [activity, setActivity] = useState<Activity>(initialState)
 
 	const handleChange = (
 		e: ChangeEvent<HTMLSelectElement> | ChangeEvent<HTMLInputElement>
@@ -27,14 +36,19 @@ export default function Form() {
 
 	const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
+
+		dispatch({ type: 'save-activity', payload: { newActivity: activity } })
+		setActivity({
+			...initialState,
+			id: uuidv4(),
+		})
 	}
 
 	return (
-		<form 
+		<form
 			className=' space-y-5 bg-white shadow p-10 rounded-lg'
-			onSubmit={handleSubmit}	
+			onSubmit={handleSubmit}
 		>
-			
 			<div className=' grid grid-cols-1 gap-3'>
 				<label
 					htmlFor='category'
@@ -93,7 +107,7 @@ export default function Form() {
 			</div>
 			<input
 				type='submit'
-				className='bg-gray-900 hover:bg-gray-600 w-full font-bold uppercase text-white cursor-pointer disabled:opacity-10'
+				className='bg-gray-900 hover:bg-gray-600 w-full font-bold uppercase text-white cursor-pointer disabled:opacity-10 py-2 rounded-md'
 				value={activity.category === 1 ? 'Guardar Comida' : 'Guardar Ejercicio'}
 				disabled={!isValidActivity()}
 			/>
