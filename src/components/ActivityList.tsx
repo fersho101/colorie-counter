@@ -19,11 +19,20 @@ export default function ActivityList({
 		[activities]
 	)
 
+	const isEmptyActivity = useMemo(() => activities.length === 0, [activities])
+
 	return (
 		<>
 			<h2 className='text-4xl font-bold text-slate-600 text-center'>
 				Comida y Actividades
 			</h2>
+
+			{isEmptyActivity ? (
+				<p className='text-center '>No hay actividades aun ...</p>
+			) : (
+				''
+			)}
+
 			{activities.map(elem => (
 				<div
 					key={elem.id}
@@ -53,7 +62,7 @@ export default function ActivityList({
 
 						<button
 							onClick={() =>
-								dispatch({type: 'delete-activeId', payload: {id: elem.id}})
+								dispatch({ type: 'delete-activeId', payload: { id: elem.id } })
 							}
 						>
 							<XCircleIcon className='h-8 w-8 text-red-500' />
