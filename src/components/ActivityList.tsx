@@ -62,7 +62,7 @@ export default function ActivityList({
 
 						<button
 							onClick={() =>
-								dispatch({ type: 'delete-activeId', payload: { id: elem.id } })
+								dispatch({ type: 'delete-activity', payload: { id: elem.id } })
 							}
 						>
 							<XCircleIcon className='h-8 w-8 text-red-500' />
